@@ -11,6 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { saveReminder } from './calendarSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
 import s from './Calendar.module.css';
 
 const COLORS = ['#039BE5', '#3F51B5', '#33B679', '#0B8043', '#F4511E', '#F6BF26'];
@@ -21,6 +24,8 @@ export default ({ date, day }) => {
   const [text, setText] = React.useState('');
   const [city, setCity] = React.useState('');
   const [color, setColor] = React.useState(COLORS[0]);
+
+  const dispatch = useDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,11 +44,11 @@ export default ({ date, day }) => {
       time,
       color,
       text,
-      date,
+      date: date.format('YYYY-MM-DD'),
       city
     };
 
-    //save(reminder);
+    dispatch(saveReminder(reminder));
 
     handleClose();
   }
