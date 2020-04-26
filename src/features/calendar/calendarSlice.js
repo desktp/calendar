@@ -1,6 +1,6 @@
-import get from 'lodash.get';
-import set from 'lodash.set';
 import { createSlice } from '@reduxjs/toolkit';
+import setWith from 'lodash/setWith';
+import get from 'lodash/get';
 
 /**
  * reminders will have an object:key structure to access
@@ -46,12 +46,8 @@ export const calendarSlice = createSlice({
       const remindersOfDay = get(state, `reminders[${year}][${month}][${day}]`, []);
       remindersOfDay.push(payload);
 
-      console.log('DEBUG: -----------------------------------------');
-      console.log('DEBUG: month.toString()', month.toString(), typeof month.toString());
-      console.log('DEBUG: day.toString()', day.toString(), typeof day.toString());
-      console.log('DEBUG: -----------------------------------------');
       // Just "mutating" the object sets the state
-      set(state, `reminders[${year.toString()}][${month.toString()}][${day.toString()}]`, remindersOfDay);
+      setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
     },
   },
 });
