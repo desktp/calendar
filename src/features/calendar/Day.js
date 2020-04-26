@@ -1,4 +1,6 @@
 import React from 'react';
+import get from 'lodash.get';
+
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -26,6 +28,13 @@ export default ({ date, day }) => {
   const [color, setColor] = React.useState(COLORS[0]);
 
   const dispatch = useDispatch();
+  const reminders = useSelector((state) => {
+    const formattedDate = date.format('YYYY-MM-DD');
+    const [year, month, day] = formattedDate.split('-');
+    const reminders = get(state, `calendarReducer.reminders[${year}][${month}][${day}]`, []);
+    if (reminders === null) return [];
+    return reminders;
+  });
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -81,6 +90,7 @@ export default ({ date, day }) => {
     <>
       <div className={s.cell} onClick={handleClick}>
         <p>{date.format('DD')}</p>
+        {reminders.map(r => <p style={{ backgroundColor: r.color }}>{r.time}: {r.text}</p>)}
       </div>
       <Popover
         id={id}
