@@ -184,7 +184,13 @@ export default ({ date, reminder, handleSave, handleUpdate, handleDelete }) => {
               </Select>
             </FormControl>
             <FormControl>
-              <TextField id='reminderText' label='Text' value={text} onChange={setter(setText)} />
+              <TextField
+                id='reminderText'
+                label='Text'
+                value={text}
+                onChange={setter(setText)}
+                inputProps={{ maxLength: 30 }}
+              />
             </FormControl>
             <FormControl>
             <Autocomplete

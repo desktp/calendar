@@ -2,10 +2,15 @@
   padding: 0 3px;
   justify-content: flex-start;
   width: 100%;
-  margin: 5px 0;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+
+.reminderTime {
+  font-weight: 100;
+  margin-right: 5px;
 }
 
 .reminderText {
-  font-weight: 100;
-  margin-right: 5px;
+  word-break: break-word;
 }

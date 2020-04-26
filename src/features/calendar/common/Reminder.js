@@ -20,8 +20,8 @@ export default ({ reminder, handleSetEditing }) => {
           root: s.reminderRoot
         }}
         >
-        <span className={s.reminderText}>{reminder.time}</span>
-        {reminder.text}
+        <span className={s.reminderTime}>{reminder.time}</span>
+        <span className={s.reminderText}>{reminder.text}</span>
       </ButtonBase>
     </Tooltip>
   )
