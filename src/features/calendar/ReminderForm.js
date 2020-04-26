@@ -13,6 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import s from './Calendar.module.css';
 
 const COLORS = ['#039BE5', '#3F51B5', '#33B679', '#0B8043', '#F4511E', '#F6BF26'];
@@ -22,11 +24,13 @@ export default ({ date, reminder, handleSave, handleUpdate }) => {
   const [text, setText] = useState(get(reminder, 'text', ''));
   const [city, setCity] = useState(get(reminder, 'city', ''));
   const [color, setColor] = useState(get(reminder, 'color', COLORS[0]));
+  const [cities, setCities] = useState([]);
 
   const getMonth = (date) => moment(date, 'YYYY-MM-DD').format('MMM');
+  const getDay = (date) => moment(date, 'YYYY-MM-DD').date();
 
   const [month, setMonth] = useState(getMonth(get(reminder, 'date', date)));
-  const [day, setDay] = useState(1);
+  const [day, setDay] = useState(getDay(get(reminder, 'date', date)));
 
   const editing = !!reminder;
 
@@ -35,6 +39,24 @@ export default ({ date, reminder, handleSave, handleUpdate }) => {
   }
 
   const getDaysOfMonth = (month) => moment(`${date.year()}-${month}`, 'YYYY-MMM').daysInMonth();
+
+  const handleCityInputChange = async (event, value) => {
+    if (value.length >= 3) {
+      const response = await fetch(`https://andruxnet-world-cities-v1.p.rapidapi.com/?query=${value}&searchby=city`, {
+        'headers': {
+          'x-rapidapi-host': 'andruxnet-world-cities-v1.p.rapidapi.com',
+          'x-rapidapi-key': '08d93ac3cemsheeb249be2c736c3p1ae4afjsn9834378cb0a2'
+        }
+      });
+  
+      if (response.ok) {
+        const json = await response.json();
+        setCities(json);
+      }
+    }
+  }
+
+  const handleCitySelect = (event, value, reason) => setCity(value);
 
   const handleSaveReminder = () => {
     const payload = {
@@ -143,7 +165,30 @@ export default ({ date, reminder, handleSave, handleUpdate }) => {
             <TextField id='reminderText' label='Text' value={text} onChange={setter(setText)} />
           </FormControl>
           <FormControl>
-            <TextField id='city' label='City' value={city} onChange={setter(setCity)} />
+          <Autocomplete
+            id='city-autocomplete'
+            options={cities.map(c => `${c.city}, ${c.country}`)}
+            autoHighlight
+            onInputChange={handleCityInputChange}
+            onChange={handleCitySelect}
+            value={city}
+            renderOption={(option) => (
+              <React.Fragment>
+                {option}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label='City'
+                placeholder='Being typing to search'
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: 'new-password'
+                }}
+              />
+            )}
+          />
           </FormControl>
           <FormControl>
             <InputLabel id='color'>Color</InputLabel>
