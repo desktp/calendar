@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
-import Day from './Day';
+import Day from './common/Day';
 
 import s from './Calendar.module.css';
 

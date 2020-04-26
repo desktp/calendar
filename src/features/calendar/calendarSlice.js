@@ -49,10 +49,29 @@ export const calendarSlice = createSlice({
       // Just "mutating" the object sets the state
       setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
     },
+    updateReminder: (state, { payload }) => {
+      const { reminder, originalDate } = payload;
+
+      // first remove the existing reminder
+      const [oldYear, oldMonth, oldDay] = originalDate.split('-');
+      const oldRemindersOfDay = get(state, `reminders[${oldYear}][${oldMonth}][${oldDay}]`, []);
+      const oldReminder = oldRemindersOfDay.filter(r => r.id !== reminder.id);
+
+      setWith(state, `reminders[${oldYear}][${oldMonth}][${oldDay}]`, oldReminder, Object);
+
+      // Now save the updated reminder
+      const [year, month, day] = reminder.date.split('-');
+
+      const remindersOfDay = get(state, `reminders[${year}][${month}][${day}]`, []);
+      remindersOfDay.push(reminder);
+
+      // Just "mutating" the object sets the state
+      setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
+    }
   },
 });
 
-export const { saveReminder } = calendarSlice.actions;
+export const { saveReminder, updateReminder } = calendarSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
