@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
+import Day from './Day';
+
 import s from './Calendar.module.css';
 
 export default () => {
@@ -32,7 +34,7 @@ export default () => {
   const renderTableBody = () => {
     const days = now.daysInMonth();
     // Gets day of the week of first day of the month
-    const skipCells = now.date(1).day();
+    const skipCells = moment(now).date(1).day();
     const returnElements = [];
     const rowsNecessary = Math.trunc((days + skipCells) / 7);
 
@@ -55,8 +57,9 @@ export default () => {
 
       if ((row === 0 && skip >= i) || day > now.daysInMonth())
         returnElements.push(<div className={s.cell} key={`cell_${day}`}></div>);
-      else
-        returnElements.push(<div className={s.cell} key={`cell_${day}`}>{day}</div>);
+      else {
+        returnElements.push(<Day key={`cell_${day}`} date={moment(now).date(day)} day={day} />);
+      }
     }
 
     return returnElements;

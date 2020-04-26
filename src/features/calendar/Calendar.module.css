@@ -13,3 +13,26 @@
   min-height: 80px;
   border: 1px solid black;
 }
+
+.root {
+  min-width: 275,
+}
+
+.title {
+  font-size: 18;
+}
+
+.pos {
+  margin-bottom: 12;
+}
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+}
+
+.colorPreview {
+  width: 15px;
+  height: 15px;
+  border: 1px solid white;
+}
