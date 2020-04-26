@@ -1,5 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
+import moment from 'moment';
 
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
@@ -22,7 +23,7 @@ const COLORS = ['#039BE5', '#3F51B5', '#33B679', '#0B8043', '#F4511E', '#F6BF26'
 
 export default ({ date, day }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [time, setTime] = React.useState('120');
+  const [time, setTime] = React.useState('12:00');
   const [text, setText] = React.useState('');
   const [city, setCity] = React.useState('');
   const [color, setColor] = React.useState(COLORS[0]);
@@ -31,9 +32,9 @@ export default ({ date, day }) => {
   const reminders = useSelector((state) => {
     const formattedDate = date.format('YYYY-MM-DD');
     const [year, month, day] = formattedDate.split('-');
-    const reminders = get(state, `calendarReducer.reminders[${year}][${month}][${day}]`, []);
-    if (reminders === null) return [];
-    return reminders;
+    const reminders = get(state, `calendar.reminders[${year}][${month}][${day}]`, []);
+
+    return [...reminders].sort((a, b) => a.time.localeCompare(b.time));
   });
 
   const handleClick = (event) => {
@@ -50,6 +51,7 @@ export default ({ date, day }) => {
 
   const handleSave = () => {
     const reminder = {
+      id: moment().unix().toString(),
       time,
       color,
       text,
@@ -75,7 +77,7 @@ export default ({ date, day }) => {
       const timeString = `${hour < 10 ? `0${hour}` : hour}:${minutes === 0 ? '00' : minutes}`
 
       returnElements.push(
-        <MenuItem value={`${hour}${minutes}`} key={timeString}>
+        <MenuItem value={timeString} key={timeString}>
           {timeString}
         </MenuItem>
       );
@@ -89,8 +91,8 @@ export default ({ date, day }) => {
   return (
     <>
       <div className={s.cell} onClick={handleClick}>
-        <p>{date.format('DD')}</p>
-        {reminders.map(r => <p style={{ backgroundColor: r.color }}>{r.time}: {r.text}</p>)}
+        <span>{date.format('DD')}</span>
+        {reminders.map(r => <p key={r.id} style={{ backgroundColor: r.color }}>{r.time}: {r.text}</p>)}
       </div>
       <Popover
         id={id}

@@ -8,10 +8,10 @@ import calendarReducer from '../features/calendar/calendarSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['calendarReducer']
+  whitelist: ['calendar']
 }
 
-const persistedReducer = persistReducer(persistConfig, combineReducers({ calendarReducer }));
+const persistedReducer = persistReducer(persistConfig, combineReducers({ calendar: calendarReducer }));
 
 export default () => {
   let store = configureStore({
