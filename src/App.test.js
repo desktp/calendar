@@ -1,15 +1,21 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import store from './app/store';
-import App from './App';
+import { PersistGate } from 'redux-persist/integration/react'
 
-test('renders learn react link', () => {
+import App from './App';
+import createPersistedStore from './app/store';
+
+const { store, persistor } = createPersistedStore();
+
+test('renders calendar header', () => {
   const { getByText } = render(
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   );
 
-  expect(getByText(/learn/i)).toBeInTheDocument();
+  expect(getByText(/sunday/i)).toBeInTheDocument();
 });

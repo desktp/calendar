@@ -1,17 +1,32 @@
-.table-root {
-  border: 1px solid blue;
-  width: 100%;
-  height: 100%;
+.calendarHeader {
+  display: flex;
+  padding: 20px;
+}
+
+.calendarHeader h4 {
+  margin-left: 20px;
+  color: #757575;
 }
 
 .row {
   display: flex;
 }
 
+.headerCell {
+  flex-basis: 14.2%;
+  background-color: #51c6ff;
+  text-align: center;
+  border: 1px solid #d2d2d2;
+}
+
 .cell {
   flex-basis: 14.2%;
-  min-height: 80px;
-  border: 1px solid black;
+  height: 150px;
+  border: 1px solid #d2d2d2;
+}
+
+.weekendCell {
+  background-color: #e8e8e8;
 }
 
 .root {
@@ -22,13 +37,13 @@
   font-size: 18;
 }
 
-.pos {
-  margin-bottom: 12;
-}
-
 .formActions {
   display: flex;
   flex-direction: column;
+}
+
+.formDateWrapper > div:first-child {
+  margin-right: 10px
 }
 
 .colorPreview {

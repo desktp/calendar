@@ -1,0 +1,11 @@
+.reminderRoot.reminderRoot {
+  padding: 0 3px;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.reminderText {
+  font-weight: 100;
+  margin-right: 5px;
+}

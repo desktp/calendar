@@ -143,7 +143,7 @@ export default ({ date, reminder, handleSave, handleUpdate, handleDelete }) => {
           <div className={s.formActions}>
             {
               editing ?
-                <div>
+                <div className={s.formDateWrapper}>
                   <FormControl>
                     <InputLabel id='month'>Month</InputLabel>
                     <Select
@@ -168,7 +168,7 @@ export default ({ date, reminder, handleSave, handleUpdate, handleDelete }) => {
                   </FormControl>
                 </div>
                 :
-                <Typography className={s.pos} color='textSecondary'>
+                <Typography color='textSecondary' gutterBottom>
                   {date.format('MMM do')}
                 </Typography>
             }

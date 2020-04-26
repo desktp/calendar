@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+
 import Day from './common/Day';
 
 import s from './Calendar.module.css';
@@ -54,11 +61,11 @@ export default () => {
 
     for (let i = 1; i <= 7; i += 1) {
       const day = (i - skip) + (row * 7);
-
+      const isWeekend = i === 1 || i === 7;
       if ((row === 0 && skip >= i) || day > now.daysInMonth())
-        returnElements.push(<div className={s.cell} key={`cell_${day}`}></div>);
+        returnElements.push(<div className={`${s.cell} ${isWeekend ? s.weekendCell : ''}` } key={`cell_${day}`}></div>);
       else {
-        returnElements.push(<Day key={`cell_${day}`} date={moment(now).date(day)} day={day} />);
+        returnElements.push(<Day key={`cell_${day}`} date={moment(now).date(day)} isWeekend={isWeekend} />);
       }
     }
 
@@ -66,25 +73,37 @@ export default () => {
   }
 
   return (
-    <div>
-      <button onClick={previousMonth}>previous</button>
-      <h1>{now.format('MMMM (YYYY)')}</h1>
-      <button onClick={nextMonth}>next</button>
+    <>
+      <div className={s.calendarHeader}>
+        <div>
+          <Tooltip title='Previous month'>
+            <IconButton aria-label='previous' onClick={previousMonth}>
+              <ChevronLeft />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='Next month'>
+            <IconButton aria-label='next' onClick={nextMonth}>
+              <ChevronRight />
+            </IconButton>
+          </Tooltip>
+        </div>
+        <Typography variant='h4'>{now.format('MMMM (YYYY)')}</Typography>
+      </div>
     
       <div className={s.tableRoot}>
         <div className={s.row}>
-          <div className={s.cell}>Sunday</div>
-          <div className={s.cell}>Monday</div>
-          <div className={s.cell}>Tuesday</div>
-          <div className={s.cell}>Wednesday</div>
-          <div className={s.cell}>Thursday</div>
-          <div className={s.cell}>Friday</div>
-          <div className={s.cell}>Saturday</div>
+          <div className={s.headerCell}>Sunday</div>
+          <div className={s.headerCell}>Monday</div>
+          <div className={s.headerCell}>Tuesday</div>
+          <div className={s.headerCell}>Wednesday</div>
+          <div className={s.headerCell}>Thursday</div>
+          <div className={s.headerCell}>Friday</div>
+          <div className={s.headerCell}>Saturday</div>
         </div>
         <div className={s.body}>
           {renderTableBody()}
         </div>
       </div>
-    </div>
+    </>
   )
 }

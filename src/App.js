@@ -1,9 +1,14 @@
 import React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 import Calendar from './features/calendar/Calendar';
 
 function App() {
   return (
-    <Calendar />
+    <>
+      <CssBaseline />
+      <Calendar />
+    </>
   );
 }
 

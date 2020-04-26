@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { saveReminder, updateReminder, deleteReminder, deleteAllReminders } from '../calendarSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,8 +19,9 @@ import ReminderForm from '../ReminderForm';
 import Reminder from './Reminder';
 
 import s from '../Calendar.module.css';
+import d from './Day.module.css';
 
-export default ({ date }) => {
+export default ({ date, isWeekend }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [editingReminder, setEditingReminder] = useState();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -82,14 +84,21 @@ export default ({ date }) => {
 
   return (
     <>
-      <div className={s.cell} onClick={handleClick}>
-        <div>
+      <div className={`${s.cell} ${isWeekend ? s.weekendCell : ''}`} onClick={handleClick}>
+        <div className={d.dayHeader}>
           <span>{date.format('DD')}</span>
-          <IconButton aria-label='delete' color='secondary' onClick={handleDialogOpen}>
-            <DeleteIcon />
-          </IconButton>
+          {reminders.length ?
+            <Tooltip title='Clear day'>
+              <IconButton aria-label='delete' color='secondary' size='small' onClick={handleDialogOpen}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            : <></>
+          }
         </div>
-        {reminders.map(r => <Reminder key={r.id} reminder={r} handleSetEditing={handleSetEditing} />)}
+        <div className={d.remindersContainer}>
+          {reminders.map(r => <Reminder key={r.id} reminder={r} handleSetEditing={handleSetEditing} />)}
+        </div>
       </div>
       <Popover
         id={id}
