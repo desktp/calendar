@@ -30,6 +30,29 @@ describe('calendar reducer', () => {
     expect(calendar(INITIAL_STATE, { type: 'calendar/saveReminder', payload: reminder })).toEqual(expected);
   });
 
+  it('should trim reminder with long text', () => {
+    const reminder = {
+      id: '1587927818',
+      time: '12:00',
+      color: '#039BE5',
+      text: '123456789012345678901234567890text',
+      date: '2020-04-12',
+      city: 'London, United Kingdom'
+    };
+    
+    const expected = {
+      reminders: {
+        '2020': {
+          '04': {
+            '12': [{ ...reminder, text: '123456789012345678901234567890', }]
+          }
+        }
+      }
+    }
+
+    expect(calendar(INITIAL_STATE, { type: 'calendar/saveReminder', payload: reminder })).toEqual(expected);
+  });
+
   it('should remove reminder', () => {
     const reminder = {
       id: '1587927818',

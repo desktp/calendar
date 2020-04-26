@@ -43,9 +43,13 @@ export const calendarSlice = createSlice({
   reducers: {
     saveReminder: (state, { payload }) => {
       const [year, month, day] = payload.date.split('-');
-
       const remindersOfDay = get(state, `reminders[${year}][${month}][${day}]`, []);
-      remindersOfDay.push(payload);
+      
+      if (payload.text.length > 30) {
+        const text = payload.text.substring(0, 30);
+        remindersOfDay.push({ ...payload, text });
+      } else
+        remindersOfDay.push(payload);
 
       // Just "mutating" the object sets the state
       setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
@@ -64,7 +68,12 @@ export const calendarSlice = createSlice({
       const [year, month, day] = reminder.date.split('-');
 
       const remindersOfDay = get(state, `reminders[${year}][${month}][${day}]`, []);
-      remindersOfDay.push(reminder);
+  
+      if (reminder.text.length > 30) {
+        const text = reminder.text.substring(0, 30);
+        remindersOfDay.push({ ...reminder, text });
+      } else
+        remindersOfDay.push(reminder);
 
       // Just "mutating" the object sets the state
       setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
