@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import setWith from 'lodash/setWith';
 import get from 'lodash/get';
+import unset from 'lodash/unset';
 
 /**
  * reminders will have an object:key structure to access
@@ -67,11 +68,22 @@ export const calendarSlice = createSlice({
 
       // Just "mutating" the object sets the state
       setWith(state, `reminders[${year}][${month}][${day}]`, remindersOfDay, Object);
+    },
+    deleteReminder: (state, { payload }) => {
+      const [year, month, day] = payload.date.split('-');
+      const remindersOfDay = get(state, `reminders[${year}][${month}][${day}]`, []);
+      const reminders = remindersOfDay.filter(r => r.id !== payload.id);
+
+      setWith(state, `reminders[${year}][${month}][${day}]`, reminders, Object);
+    },
+    deleteAllReminders: (state, { payload }) => {
+      const [year, month, day] = payload.split('-');
+      unset(state, `reminders[${year}][${month}][${day}]`);
     }
   },
 });
 
-export const { saveReminder, updateReminder } = calendarSlice.actions;
+export const { saveReminder, updateReminder, deleteReminder, deleteAllReminders } = calendarSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
